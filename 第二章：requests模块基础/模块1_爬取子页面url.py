@@ -25,9 +25,9 @@ def get_kids_links():
     # 爬取第一页到四十一页的每一天的url
     for page_num in range(1, 42):
         if (page_num == 1):
-            new_url = first_page
+            new_url = first_page    #第一天的url
         else:
-            new_url = format(next_page % page_num)
+            new_url = format(next_page % page_num)  #后面的url需要给%d赋值
         res = requests.get(url=new_url, headers=headers)  # 请求网址
         page_text = res.text
         soup = BeautifulSoup(page_text, 'lxml')
@@ -38,11 +38,14 @@ def get_kids_links():
             page_text = res.text
             soup = BeautifulSoup(page_text, 'lxml')
             li_list = soup.select('.zxxx_list > li > a')
-        for li in li_list:  # 存入yiqing.txt
+            # 存入yiqing.txt文件中
+        for li in li_list:
             title = li.string
-            detail_url = 'http://www.nhc.gov.cn' + li['href']
+            detail_url = 'http://www.nhc.gov.cn' + li['href'] #所需丫的详细网址
             fp.write(detail_url + '\n')
             # fp.write(title + ':' + detail_url + '\n')
         print("第" + str(page_num) + "页爬取成功！！！")
-
-    print("所有数据爬取完成")
+    print("已生成yiqing.txt！！！")
+    print("所有数据爬取完成！！！")
+if __name__ == '__main__':
+    get_kids_links()

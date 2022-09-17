@@ -6,24 +6,24 @@ from lxml import etree
 from selenium.webdriver.firefox.options import Options  # 显示无可视化界面
 import os
 from multiprocessing.dummy import Pool
-
-# 创建文件夹
-file = '疫情详细信息'
-if not os.path.exists(file):
-    os.mkdir(file)
-
-#读取文件并保存
-f = open("yiqing.txt", "r", encoding='utf-8')
-urls = f.readlines()
-for i in range(len(urls)):
-    urls[i] = urls[i].rstrip('\n')
-
-# 显示无可视化界面
-options = Options()
-options.headless = True
+#用于得到子页面urls
+def get_urls():
+    #读取文件并保存
+    f = open("yiqing.txt", "r", encoding='utf-8')
+    urls = f.readlines()
+    for i in range(len(urls)):  #读取每一天的url
+        urls[i] = urls[i].rstrip('\n')
+    return urls
 
 #用于获取每一天公告的具体内容
 def get_name(url):
+    # 创建文件夹
+    file = '疫情详细信息'
+    if not os.path.exists(file):
+        os.mkdir(file)
+    # 显示无可视化界面
+    options = Options()
+    options.headless = True
     bro = webdriver.Firefox(options=options)
     bro.get(url)
     page_text = bro.page_source        #直接返回源码
@@ -45,9 +45,16 @@ def get_name(url):
     print(filename + "保存成功！！！")
     bro.quit()
 
-#创建线程池，并启动
-pool = Pool(7)
-pool.map(get_name,urls)
-pool.close()
-pool.join()
-print("所有数据爬取完成")
+#启动线程池加快爬取
+def create_pool(urls):
+    #创建线程池，并启动
+    pool = Pool(7)
+    pool.map(get_name,urls)
+    pool.close()
+    pool.join()
+    print("已生成疫情详细信息文件夹！！！")
+    print("所有数据爬取完成！！！")
+
+
+if __name__ == '__main__':
+    create_pool(get_urls())
