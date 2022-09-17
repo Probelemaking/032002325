@@ -1,10 +1,9 @@
-#爬取1-41页的各个网址的url
+# 爬取1-41页的各个网址的url
 import os
 import random
 from time import sleep
 import requests
 from bs4 import BeautifulSoup
-
 
 
 def get_kids_links():
@@ -24,15 +23,15 @@ def get_kids_links():
 
     # 爬取第一页到四十一页的每一天的url
     for page_num in range(1, 42):
-        if (page_num == 1):
-            new_url = first_page    #第一天的url
+        if page_num:
+            new_url = first_page  # 第一天的url
         else:
-            new_url = format(next_page % page_num)  #后面的url需要给%d赋值
+            new_url = format(next_page % page_num)  # 后面的url需要给%d赋值
         res = requests.get(url=new_url, headers=headers)  # 请求网址
         page_text = res.text
         soup = BeautifulSoup(page_text, 'lxml')
         li_list = soup.select('.zxxx_list > li > a')  # 定位网址
-        while (res.status_code != 200):  # 如果访问失败，就重复访问
+        while res.status_code != 200:  # 如果访问失败，就重复访问
             sleep(random.randint(0, 3) * 0.1 / 100)
             res = requests.get(url=new_url, headers=headers)
             page_text = res.text
@@ -41,11 +40,13 @@ def get_kids_links():
             # 存入yiqing.txt文件中
         for li in li_list:
             title = li.string
-            detail_url = 'http://www.nhc.gov.cn' + li['href'] #所需丫的详细网址
+            detail_url = 'http://www.nhc.gov.cn' + li['href']  # 所需丫的详细网址
             fp.write(detail_url + '\n')
             # fp.write(title + ':' + detail_url + '\n')
         print("第" + str(page_num) + "页爬取成功！！！")
     print("已生成yiqing.txt！！！")
     print("所有数据爬取完成！！！")
+
+
 if __name__ == '__main__':
     get_kids_links()
