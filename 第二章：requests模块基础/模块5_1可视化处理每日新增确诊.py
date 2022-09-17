@@ -7,95 +7,109 @@ from pyecharts.charts import Timeline, Grid, Bar, Map, Pie, Line
 import re
 import os
 
-#拿到每天的时间
-file_name = '中国每日本土新增确诊人数.xlsx'
-df = pd.read_excel(file_name)
-full_time_list=df.columns
 
-file_name = '中国每日本土新增确诊人数（转置版）.xlsx'
-df = pd.read_excel(file_name)
-province_list=list[df]
-data=[]
+data = []
+date_list = []
 total_num = []
 total1_num = []
-i=0
-
-#遍历表格中的每一天，获取对应省份信息，并形成一定的格式
-for row in df.index.values:  # 获取行号的索引，并对其进行遍历：
-    # 根据row来获取每一行指定的数据 并利用to_dict转成字典
-    all_province_dic = df.loc[row, ['河北', '山西', '辽宁', '吉林', '黑龙江', '江苏', '浙江', '安徽',
-        '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '海南',
-        '四川', '贵州', '云南', '陕西', '甘肃', '青海', '北京', '天津',
-        '上海', '重庆', '内蒙古', '广西', '西藏', '宁夏', '新疆']].to_dict()
-    all_num_list=df.loc[row, ['中国大陆（无港澳台）']].to_list()
-    # print(all_num_list)
-    total_num.append(all_num_list[0])
-    total1_num.append(int(all_num_list[0]))
-    # test_data.append(all_province_dic)
-    # print(all_province_dic)
-    # print(all_num_list)
-    data_list=[]
-    #遍历一天的每一个城市
-    for city in all_province_dic.keys(): #获得
-        each_city_dic = {}
-        each_city_dic["name"]=city
-        each_city_dic_value_list=[]
-        each_city_dic_value_list.append(all_province_dic[city])
-        if(all_num_list[0]==0): #被除数为0
-            num=0.00
-        else:
-            num=all_province_dic[city]/all_num_list[0]
-        each_city_dic_value_list.append(num)
-        each_city_dic_value_list.append(city)
-        each_city_dic["value"]=each_city_dic_value_list
-        data_list.append(each_city_dic)
-        # print(each_city_dic)
-    i+=1
-    data_dic={}
-    data_dic["data"]=data_list
-    data_dic["time"]=full_time_list[i].split('.')[1]
-    data.append(data_dic)
-
-#将得到的时间转化成list
-time_list=[]
-for num in full_time_list:
-        if(num!="Unnamed: 0"):
-            time_list.append(num.split('.')[1])
-
-# 输入
-date=input("请输入查询月份（如2021-09）：")
-print("将会为您生成当月的可视化大屏数据!!!")
-
-#形成数字与实践的对应关系
-path = r'C:\Users\86150\PycharmProjects\pachong\第二章：requests模块基础\疫情详细信息'
-path_list = os.listdir(path)
-date_list=[]
-date_list.append('0')
-date_number=0
-for file_list in path_list:
-    date_number+=1
-    ex = '(.*)\（.'
-    date_needed = re.findall(ex, file_list)
-    date_list.append(date_needed[0])
-    # print(str(date_number)+' '+date_needed[0])
-
-#画图 相关参数
+time_list = []
+minNum=0
+maxNum=50
 maxday = 0
 minday = 0
-num=-1
-maxNum = 50
-minNum = 0
-for i in date_list:
-    num+=1
-    if date in i:
-        minday=num
-        break
-num=len(date_list)
-for i in reversed(date_list):
-    num-=1
-    if date in i:
-        maxday = num
-        break
+date = ''
+#拿到每天的时间，  生成提供下方使用的信息数据
+def get_data():
+    file_name = '中国每日本土新增确诊人数.xlsx'
+    df = pd.read_excel(file_name)
+    full_time_list = df.columns
+
+    file_name = '中国每日本土新增确诊人数（转置版）.xlsx'
+    df = pd.read_excel(file_name)
+    province_list = list[df]
+    i = 0
+
+    # 遍历表格中的每一天，获取对应省份信息，并形成一定的格式
+    for row in df.index.values:  # 获取行号的索引，并对其进行遍历：
+        # 根据row来获取每一行指定的数据 并利用to_dict转成字典
+        all_province_dic = df.loc[row, ['河北', '山西', '辽宁', '吉林', '黑龙江', '江苏', '浙江', '安徽',
+                                        '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '海南',
+                                        '四川', '贵州', '云南', '陕西', '甘肃', '青海', '北京', '天津',
+                                        '上海', '重庆', '内蒙古', '广西', '西藏', '宁夏', '新疆']].to_dict()
+        all_num_list = df.loc[row, ['中国大陆（无港澳台）']].to_list()
+        # print(all_num_list)
+        total_num.append(all_num_list[0])
+        total1_num.append(int(all_num_list[0]))
+        # test_data.append(all_province_dic)
+        # print(all_province_dic)
+        # print(all_num_list)
+        data_list = []
+        # 遍历一天的每一个城市
+        for city in all_province_dic.keys():  # 获得
+            each_city_dic = {}
+            each_city_dic["name"] = city
+            each_city_dic_value_list = []
+            each_city_dic_value_list.append(all_province_dic[city])
+            if (all_num_list[0] == 0):  # 被除数为0
+                num = 0.00
+            else:
+                num = all_province_dic[city] / all_num_list[0]
+            each_city_dic_value_list.append(num)
+            each_city_dic_value_list.append(city)
+            each_city_dic["value"] = each_city_dic_value_list
+            data_list.append(each_city_dic)
+            # print(each_city_dic)
+        i += 1
+        data_dic = {}
+        data_dic["data"] = data_list
+        data_dic["time"] = full_time_list[i].split('.')[1]
+        data.append(data_dic)
+
+    # 将得到的时间转化成list
+    for num in full_time_list:
+        if (num != "Unnamed: 0"):
+            time_list.append(num.split('.')[1])
+    return data
+
+# 输入
+def input_date():
+    date = input("请输入查询月份（如2021-09）：")
+    print("将会为您生成当月的可视化大屏数据!!!")
+    # print(date)
+
+    # 形成数字与实践的对应关系
+    path = r'C:\Users\86150\PycharmProjects\pachong\第二章：requests模块基础\疫情详细信息'
+    path_list = os.listdir(path)
+
+    date_list.append('0')
+    date_number = 0
+    for file_list in path_list:
+        date_number += 1
+        ex = '(.*)\（.'
+        date_needed = re.findall(ex, file_list)
+        date_list.append(date_needed[0])
+        # print(str(date_number)+' '+date_needed[0])
+
+    # 画图 相关参数
+    # print(date_list)
+    num = -1
+    global minday,maxday,minNum,maxNum
+    minNum=0
+    maxNum=50
+    for i in date_list:
+        num += 1
+        if date in i:
+            minday = num
+            break
+    num = len(date_list)
+    for i in reversed(date_list):
+        num -= 1
+        if date in i:
+            maxday = num
+            break
+    # print(str(minday)+' '+str(maxday))
+    return date
+
 
 #获取基础表格，一天一张表格
 def get_day_chart(day: str):
@@ -259,11 +273,17 @@ def get_day_chart(day: str):
     return grid_chart
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
+
+def draw_new_infected():
     timeline = Timeline(
         init_opts=opts.InitOpts(width="1600px", height="900px", theme=ThemeType.DARK)
     )
     # print(time_list)
+    data = get_data()  # Ok
+    date = input_date()  # Ok
+    # print(minday, maxday)
+    # print(maxNum)
     for y in time_list[minday:maxday]:
         g = get_day_chart(day=y)
         timeline.add(g, time_point=str(y))
@@ -281,7 +301,16 @@ if __name__ == "__main__":
         label_opts=opts.LabelOpts(is_show=True, color="#fff"),
     )
     timeline.render(date+"月份中国每日本土新增新确诊人数（可视化界面）.html ")
-    # print(time_list[879:899])
-    # print(total_num[879:899])
     print("已生成"+date+"月份中国每日本土新增确诊人数（可视化界面）.html！！")
     print(date+"月份动态可视化大屏生成成功,请点击查看！！!")
+
+
+if __name__ == '__main__':
+    draw_new_infected()
+
+    # print(data,total_num ,total1_num,time_list,minNum,maxNum,)
+    # print(data)
+# data = []
+# total_num = []
+# total1_num = []
+# time_list = []
