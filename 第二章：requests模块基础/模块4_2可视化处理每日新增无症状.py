@@ -111,8 +111,9 @@ def input_date():
     return date
 
 
-#获取基础表格，一天一张表格
+# 获取基础表格，一天一张表格
 def get_day_chart(day: str):
+    # 获取到由data_mark生成的每日疫情总人数的list
     map_data = [
         [[x["name"], x["value"]] for x in d["data"]] for d in data if d["time"] == day
     ][0]
@@ -127,6 +128,7 @@ def get_day_chart(day: str):
             data_mark.append("")
         i = i + 1
     # print(data_mark)
+    # 绘制地区图
     map_chart = (
         Map()
         .add(
@@ -177,7 +179,7 @@ def get_day_chart(day: str):
         )
     )
 
-    #绘制折线图
+    # 绘制折线图
     line_chart = (
 
         Line()
@@ -191,7 +193,7 @@ def get_day_chart(day: str):
         .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
         .set_global_opts(
             title_opts=opts.TitleOpts(
-                title="中国每日本土新增无症状人数(单位:人）", pos_left="72%", pos_top="5%"
+                title="中国当月本土新增无症状人数(单位:人）", pos_left="72%", pos_top="5%"
             )
         )
     )
@@ -229,7 +231,7 @@ def get_day_chart(day: str):
         )
     )
 
-    #绘制饼图
+    # 绘制饼图
     pie_data = [[x[0], x[1][0]] for x in map_data]
     pie = (
         Pie()
@@ -248,7 +250,7 @@ def get_day_chart(day: str):
         )
     )
 
-    #绘制综合图
+    # 绘制综合图
     grid_chart = (
         Grid()
         .add(

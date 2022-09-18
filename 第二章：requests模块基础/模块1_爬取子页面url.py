@@ -4,7 +4,7 @@ import random
 from time import sleep
 import requests
 from bs4 import BeautifulSoup
-
+import lxml
 # 爬取1-41页的各个网址的url
 def get_kids_links():
     # 创建文件夹
@@ -23,24 +23,25 @@ def get_kids_links():
 
     # 爬取第一页到四十一页的每一天的url
     for page_num in range(1, 42):
-        if page_num:
+        if page_num == 1:
             new_url = first_page  # 第一天的url
         else:
             new_url = format(next_page % page_num)  # 后面的url，通过format给%d附带上页码
         res = requests.get(url=new_url, headers=headers)  # 请求网址
         page_text = res.text                             # 获取内容
         soup = BeautifulSoup(page_text, 'lxml')
+
         li_list = soup.select('.zxxx_list > li > a')  # 定位url部分
-        while res.status_code != 200:  # 如果访问失败，就重复访问
+        while len(li_list) == 0:  # 如果访问失败，就重复访问
             sleep(random.randint(0, 3) * 0.1 / 100)
             res = requests.get(url=new_url, headers=headers)    # 与上述相同
             page_text = res.text
             soup = BeautifulSoup(page_text, 'lxml')
             li_list = soup.select('.zxxx_list > li > a')
-
         # 存入yiqing.txt文件中
+        # print(li_list)
         for li in li_list:
-            title = li.string
+            # title = li.string
             detail_url = 'http://www.nhc.gov.cn' + li['href']  # 所需要的详细网址
             fp.write(detail_url + '\n')
             # fp.write(title + ':' + detail_url + '\n')

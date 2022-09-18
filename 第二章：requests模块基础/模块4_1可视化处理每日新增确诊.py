@@ -1,12 +1,11 @@
 from typing import List
-import pandas as pd
 import pyecharts.options as opts
 from pyecharts.globals import ThemeType
 from pyecharts.commons.utils import JsCode
 from pyecharts.charts import Timeline, Grid, Bar, Map, Pie, Line
 import re
 import os
-
+import pandas as pd
 
 data = []
 date_list = []
@@ -18,7 +17,7 @@ maxNum=50
 maxday = 0
 minday = 0
 date = ''
-#拿到每天的时间，  生成提供下方使用的信息数据
+# 拿到每天的时间，生成提供下方使用的信息数据
 def get_data():
     file_name = '中国每日本土新增确诊人数.xlsx'
     df = pd.read_excel(file_name)
@@ -113,6 +112,7 @@ def input_date():
 
 #获取基础表格，一天一张表格
 def get_day_chart(day: str):
+    # 获取到由data_mark生成的每日疫情总人数的list
     map_data = [
         [[x["name"], x["value"]] for x in d["data"]] for d in data if d["time"] == day
     ][0]
@@ -127,6 +127,7 @@ def get_day_chart(day: str):
             data_mark.append("")
         i = i + 1
     # print(data_mark)
+    # 生成地区图
     map_chart = (
         Map()
         .add(
@@ -177,7 +178,7 @@ def get_day_chart(day: str):
         )
     )
 
-    #绘制折线图
+    # 绘制折线图
     line_chart = (
 
         Line()
@@ -191,7 +192,7 @@ def get_day_chart(day: str):
         .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
         .set_global_opts(
             title_opts=opts.TitleOpts(
-                title="中国每日本土新增确诊人数(单位:人）", pos_left="72%", pos_top="5%"
+                title="中国当月本土新增确诊人数(单位:人）", pos_left="72%", pos_top="5%"
             )
         )
     )
@@ -229,7 +230,7 @@ def get_day_chart(day: str):
         )
     )
 
-    #绘制饼图
+    # 绘制饼图
     pie_data = [[x[0], x[1][0]] for x in map_data]
     pie = (
         Pie()
@@ -248,7 +249,7 @@ def get_day_chart(day: str):
         )
     )
 
-    #绘制综合图
+    # 绘制综合图
     grid_chart = (
         Grid()
         .add(
@@ -308,9 +309,11 @@ def draw_new_infected():
 if __name__ == '__main__':
     draw_new_infected()
 
-    # print(data,total_num ,total1_num,time_list,minNum,maxNum,)
     # print(data)
-# data = []
-# total_num = []
-# total1_num = []
-# time_list = []
+    # print(total_num)
+    # print(total1_num)
+    # print(time_list)
+    # print(minday)
+    # print(maxday)
+    # print(minNum)
+    # print(maxNum)
