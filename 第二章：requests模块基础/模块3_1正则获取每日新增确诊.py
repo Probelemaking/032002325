@@ -38,11 +38,11 @@ def get_daily_infected(path):
 
         for item in str1:
             if '解除' not in item:  # 排除掉其余不是目标的段落
-                # jishu=0
+                # counting=0
                 ex = '本土病例(\d.*?)例'  # 找到中国大陆每日本土新增确诊人数
                 all_person_number = re.findall(ex, item)
                 # print(all_person_number)
-                if (len(all_person_number) != 0):
+                if len(all_person_number) != 0:
                     # print(all_person_number)
                     province_list["中国大陆（无港澳台）"] = int(all_person_number[0])
                 ex = '(\（.*?\）)?[，；。].*'  # 用于找到各个省份信息
@@ -61,8 +61,8 @@ def get_daily_infected(path):
                             num = re.findall(ex, all_province_txt[0])
                             if len(num) != 0:
                                 province_list[city] += int(num[0])
-                                # jishu+= int(num[0])
-                                # print(jishu)
+                                # counting+= int(num[0])
+                                # print(counting)
                             else:
                                 ex = '.*?(\d.*?)例.*?'  # 特例，疫情均在某地且省份后无数字，如本土病例x例（在山西）
                                 num = re.findall(ex, item)
@@ -72,17 +72,18 @@ def get_daily_infected(path):
                                         continue  # 如，2022-02-03 天津:河北区三例（特例）
                                     # --------------------------------------
                                     province_list[city] += int(num[0])
-                                    # jishu += int(num[0])
+                                    # counting += int(num[0])
                                 else:
                                     province_list[city] += 1  # 数字在本土病例（只有一天这样）前面，如2020-05-03 1例为本土病例（在山西）
                                     province_list["中国大陆（无港澳台）"] += 1
-                # if(len(all_person_number) != 0 and jishu!=int(province_list["中国大陆（无港澳台）"])):
+                # if(len(all_person_number) != 0 and counting!=int(province_list["中国大陆（无港澳台）"])):
                 #     print("no!!!!!!!!!!!!!!!")
                 #     print(province_list["中国大陆（无港澳台）"])
-                #     print(jishu)
+                #     print(counting)
 
         # 下列统计港澳台每日新增
-        ex = '(香港特别行政区.*)'  # 匹配目标段落，如['香港特别行政区401942例（出院79100例，死亡9820例），澳门特别行政区793例（出院787例，死亡6例），台湾地区5754683例（出院13742例，死亡10329例）。']
+        # 匹配目标段落，如['香港特别行政区401942例（出院79100例，死亡9820例），澳门特别行政区793例（出院787例，死亡6例），台湾地区5754683例（出院13742例，死亡10329例）。']
+        ex = '(香港特别行政区.*)'
         str2 = re.findall(ex, filecontent, re.M)
         # print(str2)
         yesterday_number = date_number - 1
@@ -98,7 +99,7 @@ def get_daily_infected(path):
             if "澳门特别行政区" in str2[0]:
                 ex = '澳门特别行政区(\d*)例'  # 找到澳门后面感染人数
                 num = re.findall(ex, str2[0])
-                if (len(num) != 0):
+                if len(num) != 0:
                     aomen_list.append(int(num[0]))
                     province_list["澳门"] += aomen_list[date_number] - aomen_list[yesterday_number]  # 今天与昨天相减即为新增
 

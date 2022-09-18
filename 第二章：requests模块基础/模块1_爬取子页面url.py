@@ -5,7 +5,7 @@ from time import sleep
 import requests
 from bs4 import BeautifulSoup
 
-
+# 爬取1-41页的各个网址的url
 def get_kids_links():
     # 创建文件夹
     fp = 'yiqing.txt'
@@ -18,7 +18,7 @@ def get_kids_links():
     headers = {
         'User_Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.27"
     }
-    new_url = first_page
+
     fp = open('./yiqing.txt', 'w', encoding='utf-8')
 
     # 爬取第一页到四十一页的每一天的url
@@ -26,21 +26,22 @@ def get_kids_links():
         if page_num:
             new_url = first_page  # 第一天的url
         else:
-            new_url = format(next_page % page_num)  # 后面的url需要给%d赋值
+            new_url = format(next_page % page_num)  # 后面的url，通过format给%d附带上页码
         res = requests.get(url=new_url, headers=headers)  # 请求网址
-        page_text = res.text
+        page_text = res.text                             # 获取内容
         soup = BeautifulSoup(page_text, 'lxml')
-        li_list = soup.select('.zxxx_list > li > a')  # 定位网址
+        li_list = soup.select('.zxxx_list > li > a')  # 定位url部分
         while res.status_code != 200:  # 如果访问失败，就重复访问
             sleep(random.randint(0, 3) * 0.1 / 100)
-            res = requests.get(url=new_url, headers=headers)
+            res = requests.get(url=new_url, headers=headers)    # 与上述相同
             page_text = res.text
             soup = BeautifulSoup(page_text, 'lxml')
             li_list = soup.select('.zxxx_list > li > a')
-            # 存入yiqing.txt文件中
+
+        # 存入yiqing.txt文件中
         for li in li_list:
             title = li.string
-            detail_url = 'http://www.nhc.gov.cn' + li['href']  # 所需丫的详细网址
+            detail_url = 'http://www.nhc.gov.cn' + li['href']  # 所需要的详细网址
             fp.write(detail_url + '\n')
             # fp.write(title + ':' + detail_url + '\n')
         print("第" + str(page_num) + "页爬取成功！！！")

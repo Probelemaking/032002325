@@ -1,8 +1,6 @@
 import re
 import os
 import pandas as pd
-import numpy as np
-import openpyxl
 
 
 # 1. 统计中国大陆每日本土新增确诊人数及新增无症状感染人数，境外输入类型和疑似病例等无需统计。
@@ -30,10 +28,10 @@ def get_daily_asymptomatic(path):
         path = r'C:\Users\86150\PycharmProjects\pachong\第二章：requests模块基础\疫情详细信息' + '\\' + file_list
         with open(path, "r", encoding='utf-8') as f:
             file = f.readlines()
-        filecontent = ''.join(file)
-        if "无症状" in filecontent:
+        file_content = ''.join(file)
+        if "无症状" in file_content:
             ex = "(新增无症状感染者.*)"
-            str_test = re.findall(ex, filecontent)
+            str_test = re.findall(ex, file_content)
             # print(str_test)
             # print(date)
 
@@ -67,7 +65,7 @@ def get_daily_asymptomatic(path):
                         every_province_list = re.findall(ex, str_test[0])
                         if len(every_province_list) != 0 and every_province_list[0] != '':
                             # print(every_province_list)
-                            # jishu = 0
+                            counting = 0
                             for city in province_list.keys():
                                 # ----------------------------------
                                 if len(str_test) != 0:
@@ -77,8 +75,8 @@ def get_daily_asymptomatic(path):
                                         if len(num) != 0:  # 正常找到多少例：如括号内的北京2例
                                             province_list[city] += int(num[0])
 
-                                            # jishu += int(num[0])
-                                            # print(jishu)
+                                            # counting += int(num[0])
+                                            # print(counting)
                                         else:  # 特例，疫情均在某地且省份后无数字，如本土病例x例（在山西）
                                             ex = '本土(\d.*?)例.*?'
                                             num = re.findall(ex, str_test[0])
@@ -89,16 +87,16 @@ def get_daily_asymptomatic(path):
                                                 # --------------------------------------
                                                 # print(city + "1111")
                                                 province_list[city] += int(num[0])
-                                                # jishu += int(num[0])
+                                                # counting += int(num[0])
 
                                             else:
                                                 # print(city + "2222")
                                                 province_list[city] += 1  # #数字在本土病例（只有一天这样）前面，如2020-05-03 1例为本土病例（在山西）
                                                 province_list["中国大陆（无港澳台）"] += 1
-                            # if (len(all_infected_num_list[0]) != 0 and jishu != int(province_list["中国大陆（无港澳台）"])):
+                            # if (len(all_infected_num_list[0]) != 0 and counting != int(province_list["中国大陆（无港澳台）"])):
                             #     print("no!!!!!!!!!!!!!!!")
                             #     print(province_list["中国大陆（无港澳台）"])
-                            #     print(jishu)
+                            #     print(counting)
         time_specific = str(date_number) + '.' + date[0]  # 得到具体时间
         time_city_dic[time_specific] = province_list  # 得到时间与具体信息的字典
         print(str(date[0]) + '日信息录入完毕！！！')
