@@ -20,10 +20,10 @@ def get_urls():
 
 # 用于获取子页面的具体内容
 def get_name(url):
-    # 创建文件夹
-    file = '疫情详细信息'
+    # 创建文件夹  D:\PycharmProjects\pachong\第一次作业\疫情详细信息
+    file = r'D:\PycharmProjects\pachong\第一次作业\疫情详细信息'
     if not os.path.exists(file):
-        os.mkdir(file)
+        os.makedirs(file)
     # 显示无可视化界面，同通过selenium模块对火狐浏览器发起模拟登录
     options = Options()
     options.headless = True
@@ -47,7 +47,7 @@ def get_name(url):
     filename = release_time + '（发布时间）' + title + '.html'  # 定义文件名
     with open(file + '/' + filename, 'w', encoding='utf8') as fp:
         fp.write(text_content)
-    print(filename + "保存成功！！！")
+    print(file+'\\'+filename + "保存成功！！！")
     bro.quit()
 
 

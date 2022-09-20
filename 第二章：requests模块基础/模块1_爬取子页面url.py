@@ -1,16 +1,11 @@
 # 爬取1-41页的各个网址的url
-import os
 import random
 from time import sleep
 import requests
 from bs4 import BeautifulSoup
-import lxml
+
 # 爬取1-41页的各个网址的url
 def get_kids_links():
-    # 创建文件夹
-    fp = 'yiqing.txt'
-    if not os.path.exists(fp):
-        os.mkdir(fp)
 
     # 初始化设置
     first_page = "http://www.nhc.gov.cn/xcs/yqtb/list_gzbd.shtml"  # 卫健委第一页的网址

@@ -18,7 +18,7 @@ maxNum=100
 maxday = 0
 minday = 0
 date = ''
-#拿到每天的时间，  生成提供下方使用的信息数据
+# 拿到每天的时间，  生成提供下方使用的信息数据
 def get_data():
     file_name = '中国每日本土新增无症状人数.xlsx'
     df = pd.read_excel(file_name)
@@ -50,7 +50,7 @@ def get_data():
             each_city_dic["name"] = city
             each_city_dic_value_list = []
             each_city_dic_value_list.append(all_province_dic[city])
-            if (all_num_list[0] == 0):  # 被除数为0
+            if all_num_list[0] == 0:  # 被除数为0
                 num = 0.00
             else:
                 num = all_province_dic[city] / all_num_list[0]
@@ -67,7 +67,7 @@ def get_data():
 
     # 将得到的时间转化成list
     for num in full_time_list:
-        if (num != "Unnamed: 0"):
+        if num != "Unnamed: 0":
             time_list.append(num.split('.')[1])
     return data
 
@@ -77,8 +77,8 @@ def input_date():
     print("将会为您生成当月的可视化大屏数据!!!")
     # print(date)
 
-    # 形成数字与实践的对应关系
-    path = r'C:\Users\86150\PycharmProjects\pachong\第二章：requests模块基础\疫情详细信息'
+    # 形成序号与时间的对应关系
+    path = r'D:\PycharmProjects\pachong\第一次作业\疫情详细信息'
     path_list = os.listdir(path)
 
     date_list.append('0')
@@ -93,7 +93,7 @@ def input_date():
     # 画图 相关参数
     # print(date_list)
     num = -1
-    global minday,maxday,minNum,maxNum
+    global minday, maxday, minNum, maxNum
     minNum=0
     maxNum=100
     for i in date_list:
@@ -312,7 +312,7 @@ if __name__ == '__main__':
 
     # print(data,total_num ,total1_num,time_list,minNum,maxNum,)
     # print(data)
-# data = []
-# total_num = []
-# total1_num = []
-# time_list = []
+    # data = []
+    # total_num = []
+    # total1_num = []
+    # time_list = []

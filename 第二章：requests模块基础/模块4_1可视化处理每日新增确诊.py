@@ -74,10 +74,10 @@ def get_data():
 def input_date():
     date = input("请输入查询月份（如2021-09）：")
     print("将会为您生成当月的可视化大屏数据!!!")
-    # print(date)
+    print(date)
 
     # 形成数字与实践的对应关系
-    path = r'C:\Users\86150\PycharmProjects\pachong\第二章：requests模块基础\疫情详细信息'
+    path = r'D:\PycharmProjects\pachong\第一次作业\疫情详细信息'
     path_list = os.listdir(path)
 
     date_list.append('0')
@@ -110,7 +110,7 @@ def input_date():
     return date
 
 
-#获取基础表格，一天一张表格
+# 获取基础表格，一天一张表格
 def get_day_chart(day: str):
     # 获取到由data_mark生成的每日疫情总人数的list
     map_data = [
@@ -283,6 +283,7 @@ def draw_new_infected():
     # print(time_list)
     data = get_data()  # Ok
     date = input_date()  # Ok
+    print(date)
     # print(minday, maxday)
     # print(maxNum)
     for y in time_list[minday:maxday]:
@@ -308,7 +309,7 @@ def draw_new_infected():
 
 if __name__ == '__main__':
     draw_new_infected()
-
+    #
     # print(data)
     # print(total_num)
     # print(total1_num)
@@ -317,3 +318,4 @@ if __name__ == '__main__':
     # print(maxday)
     # print(minNum)
     # print(maxNum)
+    # print(date)

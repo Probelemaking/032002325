@@ -25,7 +25,7 @@ def get_daily_asymptomatic(path):
                          '中国大陆（无港澳台）': 0}
         ex = '(.*)\（.'
         date = re.findall(ex, file_list)
-        path = r'C:\Users\86150\PycharmProjects\pachong\第二章：requests模块基础\疫情详细信息' + '\\' + file_list
+        path = r'D:\PycharmProjects\pachong\第一次作业\疫情详细信息' + '\\' + file_list
         with open(path, "r", encoding='utf-8') as f:
             file = f.readlines()
         file_content = ''.join(file)
@@ -111,5 +111,5 @@ def get_daily_asymptomatic(path):
 
 
 if __name__ == '__main__':
-    path = r'C:\Users\86150\PycharmProjects\pachong\第二章：requests模块基础\疫情详细信息'
+    path = r'D:\PycharmProjects\pachong\第一次作业\疫情详细信息'
     get_daily_asymptomatic(path)

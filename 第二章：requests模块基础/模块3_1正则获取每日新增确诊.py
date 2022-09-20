@@ -29,7 +29,7 @@ def get_daily_infected(path):
         ex = '(.*)\（.'
         date = re.findall(ex, file_list)  # 从文件名中找到发布的时间
 
-        path = r'C:\Users\86150\PycharmProjects\pachong\第二章：requests模块基础\疫情详细信息' + '\\' + file_list
+        path = r'D:\PycharmProjects\pachong\第一次作业\疫情详细信息' + '\\' + file_list
         with open(path, "r", encoding='utf-8') as f:  # 打开具体页面
             file = f.readlines()
         filecontent = ''.join(file)  # 得到本文信息
@@ -129,5 +129,5 @@ def get_daily_infected(path):
 
 
 if __name__ == '__main__':
-    path = r'C:\Users\86150\PycharmProjects\pachong\第二章：requests模块基础\疫情详细信息'
+    path = r'D:\PycharmProjects\pachong\第一次作业\疫情详细信息'
     get_daily_infected(path)
